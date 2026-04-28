@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos - Vlog/Blog Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0f0f0f;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            height: 56px;
+            background-color: #0f0f0f;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon::after {
+            content: '▶';
+            font-size: 10px;
+            color: white;
+        }
+
+        .search-bar {
+            display: flex;
+            flex: 1;
+            max-width: 640px;
+            margin: 0 40px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid #303030;
+            border-right: none;
+            background-color: #121212;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 18px 0 0 18px;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #1c62b9;
+        }
+
+        .search-bar button {
+            padding: 0 24px;
+            background-color: #222222;
+            border: 1px solid #303030;
+            border-radius: 0 18px 18px 0;
+            cursor: pointer;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .search-bar button:hover {
+            background-color: #303030;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-right button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: #3ea6ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 72px;
+            height: calc(100vh - 56px);
+            background-color: #0f0f0f;
+            padding: 12px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background-color: #272727;
+        }
+
+        .sidebar-item.active {
+            background-color: #272727;
+        }
+
+        .sidebar-item span {
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .sidebar-icon {
+            font-size: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 72px;
+            margin-top: 56px;
+            padding: 24px;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .category {
+            padding: 8px 16px;
+            background-color: #272727;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .category:hover {
+            background-color: #3f3f3f;
+        }
+
+        .category.active {
+            background-color: #fff;
+            color: #0f0f0f;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .video-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: scale(1.02);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .thumbnail {
+            width: auto;
+            height: 16vw;
+            aspect-ratio: 9 / 16;
+            background: #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #fff;
+        }
+
+        .thumbnail-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 48px;
+        }
+
+        .duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .video-info {
+            display: flex;
+            margin-top: 12px;
+            gap: 12px;
+        }
+
+        .channel-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .video-details {
+            flex: 1;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .video-meta a {
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .video-meta a:hover {
+            color: #fff;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 12px 0;
+            border-bottom: 1px solid #303030;
+        }
+
+        .filter-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: none;
+            border: 1px solid #303030;
+            border-radius: 18px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background-color: #303030;
+        }
+
+        .filter-btn.active {
+            background-color: #fff;
+            color: #0f0f0f;
+            border-color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .search-bar {
+                display: none;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="#" class="logo">
+                <div class="logo-icon"></div>
+                 Video-Spot
+            </a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search videos...">
+            <button>🔍</button>
+        </div>
+        <div class="header-right">
+            <button>🔔</button>
+            <button>➕</button>
+            <div class="user-avatar">M</div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+        <nav class="sidebar">
+            <a href="my-videos.html" class="sidebar-item active">
+                <span class="sidebar-icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="videos.html" class="sidebar-item">
+                <span class="sidebar-icon">🎬</span>
+                <span>Videos</span>
+            </a>
+            <a href="watch-later.html" class="sidebar-item">
+                <span class="sidebar-icon">⏱️</span>
+                <span>Watch Later</span>
+            </a>
+            <a href="liked.html" class="sidebar-item">
+                <span class="sidebar-icon">👍</span>
+                <span>Liked</span>
+            </a>
+            <a href="analytics.html" class="sidebar-item">
+                <span class="sidebar-icon">📊</span>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="sidebar-item">
+                <span class="sidebar-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <h1 class="filter-title">All Videos</h1>
+            <div class="filter-options">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Recent</button>
+                <button class="filter-btn">Popular</button>
+                <button class="filter-btn">Oldest</button>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <div class="category active">All</div>
+            <div class="category">Gaming</div>
+            <div class="category">Music</div>
+            <div class="category">Tech</div>
+            <div class="category">Education</div>
+            <div class="category">Vlogs</div>
+            <div class="category">Tutorials</div>
+        </div>
+
+        <!-- Video Grid -->
+        <div class="video-grid" id="videoGrid">
+            <!-- Videos will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        // Sample video data - replace with your actual video data
+        const videos = [
+            {
+                id: 1,
+                title: "My First Video - Introduction",
+                thumbnail: null,
+                duration: "10:32",
+                views: "1.2K views",
+                date: "2 days ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 2,
+                title: "Building a Web App from Scratch",
+                thumbnail: null,
+                duration: "15:45",
+                views: "3.4K views",
+                date: "1 week ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 3,
+                title: "Python Tutorial - Complete Guide",
+                thumbnail: null,
+                duration: "45:20",
+                views: "10K views",
+                date: "2 weeks ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 4,
+                title: "Day in My Life - Vlog",
+                thumbnail: null,
+                duration: "12:15",
+                views: "800 views",
+                date: "3 weeks ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 5,
+                title: "Coding Challenge - 24 Hours",
+                thumbnail: null,
+                duration: "25:30",
+                views: "5.6K views",
+                date: "1 month ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 6,
+                title: "Setup Tour - My Workspace",
+                thumbnail: null,
+                duration: "8:45",
+                views: "2.1K views",
+                date: "1 month ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 7,
+                title: "React JS Crash Course",
+                thumbnail: null,
+                duration: "1:20:15",
+                views: "25K views",
+                date: "2 months ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 8,
+                title: "Q&A - Answering Your Questions",
+                thumbnail: null,
+                duration: "18:22",
+                views: "1.5K views",
+                date: "2 months ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 9,
+                title: "Project Showcase - Portfolio",
+                thumbnail: null,
+                duration: "14:50",
+                views: "4.2K views",
+                date: "3 months ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 10,
+                title: "Behind the Scenes - Video Production",
+                thumbnail: null,
+                duration: "22:10",
+                views: "900 views",
+                date: "3 months ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 11,
+                title: "JavaScript Tips and Tricks",
+                thumbnail: null,
+                duration: "11:35",
+                views: "7.8K views",
+                date: "4 months ago",
+                channelName: "My Channel"
+            },
+            {
+                id: 12,
+                title: "My Gaming Setup Tour",
+                thumbnail: null,
+                duration: "9:20",
+                views: "3.3K views",
+                date: "4 months ago",
+                channelName: "My Channel"
+            }
+        ];
+
+        // Function to render videos
+        function renderVideos(videoList) {
+            const grid = document.getElementById('videoGrid');
+            grid.innerHTML = '';
+
+            videoList.forEach((video, index) => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.innerHTML = `
+                    <div class="thumbnail-container">
+                        <div class="thumbnail-placeholder">▶</div>
+                        <span class="duration">${video.duration}</span>
+                    </div>
+                    <div class="video-info">
+                        <div class="channel-avatar">M</div>
+                        <div class="video-details">
+                            <h3 class="video-title">${video.title}</h3>
+                            <div class="video-meta">
+                                <a href="#">${video.channelName}</a>
+                                <span> • ${video.views} • ${video.date}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                let sortedVideos = [...videos];
+                if (btn.textContent === 'Recent') {
+                    sortedVideos.sort((a, b) => new Date(b.date) - new Date(a.date));
+                } else if (btn.textContent === 'Oldest') {
+                    sortedVideos.sort((a, b) => new Date(a.date) - new Date(b.date));
+                } else if (btn.textContent === 'Popular') {
+                    sortedVideos.sort((a, b) => parseInt(b.views) - parseInt(a.views));
+                }
+                renderVideos(sortedVideos);
+            });
+        });
+
+        // Category filter
+        const categories = document.querySelectorAll('.category');
+        categories.forEach(cat => {
+            cat.addEventListener('click', () => {
+                categories.forEach(c => c.classList.remove('active'));
+                cat.classList.add('active');
+            });
+        });
+
+        // Initial render
+        renderVideos(videos);
+    </script>
+</body>
+</html>

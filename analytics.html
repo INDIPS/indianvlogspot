@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0f0f0f; color: #fff; font-family: 'Roboto', sans-serif; margin: 0; }
+        .header { display: flex; align-items: center; padding: 0 24px; height: 56px; background: #0f0f0f; border-bottom: 1px solid #222; }
+        .logo { display: flex; align-items: center; gap: 4px; font-size: 18px; font-weight: 700; color: #fff; text-decoration: none; }
+        .logo-icon { width: 30px; height: 20px; background: #ff0000; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon::after { content: '▶'; font-size: 10px; color: white; }
+        .main-content { margin: 56px auto 0 auto; max-width: 900px; padding: 32px 16px; }
+        h1 { font-size: 2rem; margin-bottom: 24px; }
+        .analytics-section { background: #181818; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+        .analytics-title { font-size: 1.2rem; font-weight: 500; margin-bottom: 12px; }
+        .analytics-value { font-size: 2rem; font-weight: 700; color: #3ea6ff; }
+        .analytics-desc { color: #aaa; font-size: 1rem; margin-bottom: 8px; }
+        .thumbnail {
+            width: auto;
+            height: 16vw;
+            aspect-ratio: 9 / 16;
+            background: #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="my-videos.html" class="logo">
+            <div class="logo-icon"></div>
+            Video-Spot
+        </a>
+    </header>
+    <main class="main-content">
+        <h1>Analytics</h1>
+        <div class="analytics-section">
+            <div class="analytics-title">Total Videos</div>
+            <div class="analytics-value">12</div>
+            <div class="analytics-desc">Number of videos uploaded to your channel.</div>
+        </div>
+        <div class="analytics-section">
+            <div class="analytics-title">Total Views</div>
+            <div class="analytics-value">53,000</div>
+            <div class="analytics-desc">Total views across all your videos.</div>
+        </div>
+        <div class="analytics-section">
+            <div class="analytics-title">Subscribers</div>
+            <div class="analytics-value">1,200</div>
+            <div class="analytics-desc">People subscribed to your channel.</div>
+        </div>
+    </main>
+</body>
+</html>
